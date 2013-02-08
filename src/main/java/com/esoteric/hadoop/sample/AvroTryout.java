@@ -27,17 +27,26 @@ public class AvroTryout extends Configured implements Tool {
 			+ "    {\"name\": \"contents\", \"type\": \"string\"}" + "  ]"
 			+ "}");
 
+	/**
+	 *
+	 */
 	public static class MyAvroMapper extends
 			Mapper<AvroKey<GenericData.Record>, NullWritable, Text, Text> {
 		private Text key;
 		private Text value;
 
+		/* (non-Javadoc)
+		 * @see org.apache.hadoop.mapreduce.Mapper#setup(org.apache.hadoop.mapreduce.Mapper.Context)
+		 */
 		@Override
 		protected void setup(Context context) {
 			key = new Text("");
 			value = new Text("");
 		}
 
+		/* (non-Javadoc)
+		 * @see org.apache.hadoop.mapreduce.Mapper#map(KEYIN, VALUEIN, org.apache.hadoop.mapreduce.Mapper.Context)
+		 */
 		@Override
 		protected void map(AvroKey<GenericData.Record> record,
 				NullWritable ignore, Context context) throws IOException,
@@ -50,9 +59,12 @@ public class AvroTryout extends Configured implements Tool {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.apache.hadoop.util.Tool#run(java.lang.String[])
+	 */
 	@Override
 	public int run(String[] arg0) throws Exception {
-		Job job = new Job();
+		Job job = new Job(getConf(), AvroTryout.class.getName());
 		
 	    job.setInputFormatClass(AvroKeyInputFormat.class);
 	    AvroJob.setInputKeySchema(job, SCHEMA);
@@ -60,8 +72,11 @@ public class AvroTryout extends Configured implements Tool {
 	    job.setMapperClass(MyAvroMapper.class);
 	    job.setMapOutputKeyClass(Text.class);
 	    job.setMapOutputValueClass(Text.class);
+	   
+	    /* This job does not need any reducer */
+	    job.setNumReduceTasks(0);
 	    
-		return 0;
+	    return job.waitForCompletion(true) ? 1 : 0;
 	}
 
 	/**
