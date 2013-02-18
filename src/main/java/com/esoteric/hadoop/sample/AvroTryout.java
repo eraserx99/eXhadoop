@@ -78,7 +78,7 @@ public class AvroTryout extends Configured implements Tool {
 	    job.setInputFormatClass(AvroKeyInputFormat.class);
 	    AvroJob.setInputKeySchema(job, SCHEMA);
 	    
-	    job.setSpeculativeExecution(false);
+	    // job.setSpeculativeExecution(false);
 	    job.setOutputFormatClass(SequenceFileOutputFormat.class);
 	    
 	    job.setMapperClass(MyAvroMapper.class);
