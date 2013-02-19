@@ -13,8 +13,16 @@ http://maven.apache.org/xsd/assembly-1.1.0.xsd">
 			<unpack>true</unpack>
 			<scope>runtime</scope>
 			<outputDirectory>/</outputDirectory>
+			<!--
 			<excludes>
 				<exclude>org.apache.hadoop:hadoop-core</exclude>
+			</excludes>
+			-->
+			<excludes>
+				<exclude>org.apache.hadoop:*</exclude>
+				<!--
+				<exclude>org.apache.avro:*</exclude>
+				-->
 			</excludes>
 		</dependencySet>
 	</dependencySets>
